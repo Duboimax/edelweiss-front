@@ -8,13 +8,13 @@ const props = defineProps<{
 
 <template>
   <div class="bg-white overflow-hidden w-full max-w-[300px] mx-auto flex flex-col">
-    <div class="aspect-square bg-[#f5f2e9] flex items-center justify-center">
+    <div class="relative w-full border-b border-[#000000] " style="padding-top: 100%;">
       <NuxtImg
         :src="props.image || '/placeholder.svg'"
         :alt="props.productName"
+        class="absolute top-0 left-0 w-full h-full object-cover"
         width="300"
         height="300"
-        class="object-cover w-full h-full"
       />
     </div>
     <div class="p-5 flex-1 flex flex-col justify-between text-center">
