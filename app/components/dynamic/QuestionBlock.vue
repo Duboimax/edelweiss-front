@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 
-import Question from '~/components/faq/Question.vue'
+import Question from '~/components/dynamic/Question.vue'
 
 interface FaqData {
   id: number
