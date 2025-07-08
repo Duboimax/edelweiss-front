@@ -1,7 +1,10 @@
-<script setup lang="ts">
+<script setup>
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 </script>
 
+
 <template>
-    <h1 class="underline text-lg font-semibold"> Hello </h1>
+  <HomePage />
 </template>

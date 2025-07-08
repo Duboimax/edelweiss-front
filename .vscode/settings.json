@@ -1,9 +1,0 @@
-{
-  "prettier.enable": false,
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "editor.quickSuggestions": {
-    "strings": "on"
-  }
-}
