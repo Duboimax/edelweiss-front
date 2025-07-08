@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const currentYear = computed(() => new Date().getFullYear())
+</script>
+
 <template>
   <footer class="border-t border-[#e6e2d7] bg-[#f9f7f2] py-12">
     <div class="container mx-auto px-4 md:px-6">
@@ -96,10 +100,6 @@
     </div>
   </footer>
 </template>
-
-<script setup lang="ts">
-const currentYear = computed(() => new Date().getFullYear())
-</script>
 
 <style scoped>
 .container {
