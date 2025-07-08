@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CTA from '~/components/buttons/CTA.vue'
+import CTA from '~/components/dynamic/CTA.vue'
 
 const props = defineProps<{
   title: string,

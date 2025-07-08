@@ -134,8 +134,8 @@
 </template>
 
 <script setup lang="ts">
-import Map from '~/components/maps/Map.vue'
-import QuestionBlock from '~/components/faq/QuestionBlock.vue'
+import Map from '~/components/dynamic/Map.vue'
+import QuestionBlock from '~/components/dynamic/QuestionBlock.vue'
 
 const form = reactive({
   firstName: '',

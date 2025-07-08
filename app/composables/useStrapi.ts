@@ -2,7 +2,7 @@
 export const useStrapi = () => {
   const config = useRuntimeConfig()
   
-  const baseURL = config.public.strapiUrl || 'http://localhost:1337'
+  const baseURL = config.public.strapiUrl || 'https://edelweiss-back-production.up.railway.app'
   const token = config.strapiToken
 
   const strapiClient = {
