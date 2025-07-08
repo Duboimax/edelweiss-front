@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import CTA from '~/components/buttons/CTA.vue'
+
 const props = defineProps<{
     title: string,
     description: string,
-    image?: string
+    image?: string,
+    link: string
 }>()
 </script>
 
@@ -18,13 +21,12 @@ const props = defineProps<{
       />
     </div>
     
-    <!-- Content -->
-    <div class="p-6 text-center">
-      <h3 class="text-xl font-serif text-[#2a2a22]">{{ props.title }}</h3>
-      <p class="mt-2 text-sm text-[#5a5a52]">{{ props.description }}</p>
-      <button class="mt-4 bg-[#2a2a22] hover:bg-[#3a3a32] text-white rounded-none px-6 py-3 cursor-pointer transition-colors">
-        Explore
-      </button>
+   <div class="p-6 text-center flex flex-col flex-grow">
+      <h3 class="text-xl font-serif text-[#2a2a22]">{{ title }}</h3>
+      <p class="mt-2 text-sm text-[#5a5a52] flex-grow">{{ description }}</p>
+      <div class="mt-4">
+        <CTA button-name="Explore" :link="link" />
+      </div>
     </div>
   </div>
 </template>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import CTA from '~/components/buttons/CTA.vue'
+
 const props = defineProps<{
     title: string,
     description: string,
     image?: string,
     link: string,
-    items: string[]
 }>()
 </script>
 
@@ -25,11 +26,7 @@ const props = defineProps<{
       <p class="text-[#5a5a52]">{{ props.description }}</p>
       
       <div class="pt-4">
-        <NuxtLink :to="props.link">
-          <button class="bg-[#2a2a22] hover:bg-[#3a3a32] text-white rounded-none px-6 py-3 transition-colors">
-            Explore Collection
-          </button>
-        </NuxtLink>
+        <CTA button-name="Explore Collection" :link="props.link" />
       </div>
     </div>
   </div>
