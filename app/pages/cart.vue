@@ -1,6 +1,38 @@
 <script setup lang="ts">
 import { useCart } from '~/composables/useCart'
-const { cart, updateQuantity, removeFromCart, clearCart, total } = useCart()
+import { useStrapi } from '~/composables/useStrapi'
+const { cart, updateQuantity, removeFromCart, clearCart, total, addToCart } = useCart()
+const strapi = useStrapi()
+
+// Fetch un produit cross-sell (différent du panier)
+const { data: allProducts } = await useAsyncData('all-products', () =>
+  strapi.get<{ data: any[] }>('products', { pLevel: 5 }).then(res => res.data || [])
+)
+const crossSellProduct = computed(() => {
+  if (!allProducts.value) return null
+  // Prend le premier produit qui n'est pas dans le panier
+  return allProducts.value.find(p => !cart.value.some(c => c.id === p.id)) || null
+})
+
+const showFeedback = ref(false)
+function showAddFeedback() {
+  showFeedback.value = true
+  setTimeout(() => { showFeedback.value = false }, 1500)
+}
+function handleAddToCartCrossSell() {
+  const p = crossSellProduct.value
+  if (!p) return
+  if (!cart.value.find(c => c.id === p.id)) {
+    addToCart({
+      id: p.id,
+      productName: p.productName,
+      price: p.price,
+      slug: p.slug,
+      productImage: p.productImage
+    })
+    showAddFeedback()
+  }
+}
 </script>
 
 <template>
@@ -40,6 +72,7 @@ const { cart, updateQuantity, removeFromCart, clearCart, total } = useCart()
       <div v-else class="grid lg:grid-cols-3 gap-8">
         <!-- Liste des articles -->
         <div class="lg:col-span-2">
+          <div v-if="showFeedback" class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg text-center font-semibold shadow">Produit ajouté au panier !</div>
           <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <!-- Header du panier -->
             <div class="bg-gray-50 px-6 py-4 border-b">
@@ -179,6 +212,27 @@ const { cart, updateQuantity, removeFromCart, clearCart, total } = useCart()
               </div>
             </div>
           </div>
+
+          <!-- Cross-sell -->
+          <div v-if="crossSellProduct" class="mt-6 bg-[#fffafd] rounded-2xl shadow p-6 flex flex-col md:flex-row items-center gap-6">
+            <NuxtLink :to="`/product/${crossSellProduct.slug}`" class="block">
+              <img :src="'https://edelweiss-back-production.up.railway.app' + crossSellProduct.productImage.url" alt="Produit suggéré" class="w-24 h-24 object-cover rounded-xl border transition hover:scale-105" />
+            </NuxtLink>
+            <div class="flex-1">
+              <div class="font-semibold text-[#2a2a22] mb-1">Vous pourriez aimer aussi :</div>
+              <NuxtLink :to="`/product/${crossSellProduct.slug}`" class="text-lg font-serif mb-2 block text-[#2a2a22] hover:underline">
+                {{ crossSellProduct.productName }}
+              </NuxtLink>
+              <div class="text-[#5a5a52] mb-2">{{ crossSellProduct.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</div>
+              <button @click="handleAddToCartCrossSell" class="inline-block bg-[#FFB6B0] text-white px-4 py-2 rounded-full font-medium hover:bg-[#ff8e7a] transition">Ajouter au panier</button>
+            </div>
+          </div>
+          <transition name="fade-slide-up">
+            <div v-if="showFeedback" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 bg-[#2a2a22] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 animate-pop-in">
+              <Icon name="lucide:check-circle" class="w-5 h-5 text-[#FFB6B0]" />
+              Produit ajouté au panier !
+            </div>
+          </transition>
         </div>
 
         <!-- Résumé de commande -->
@@ -215,14 +269,8 @@ const { cart, updateQuantity, removeFromCart, clearCart, total } = useCart()
 
               <!-- Boutons d'action -->
               <div class="space-y-3">
-                <button class="w-full bg-black text-white py-4 rounded-xl font-semibold text-lg hover:bg-gray-800 transition-colors shadow-lg">
-                  Commander maintenant
-                </button>
-                <a href="/shop">
-                <button class="w-full border-2 border-gray-200 text-gray-900 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors">
-                  Continuer mes achats
-                </button>
-            </a>
+                <button class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2">Commander</button>
+                <div class="text-xs text-gray-500 text-center mt-2">Paiement sécurisé • Retours sous 30 jours • Livraison offerte dès 60€</div>
               </div>
 
               <!-- Codes promo -->

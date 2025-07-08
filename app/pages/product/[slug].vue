@@ -15,7 +15,6 @@
         <div v-else class="flex flex-col items-center text-center">
           <!-- Titre -->
           <h1 class="text-2xl font-semibold tracking-tight mb-4">{{ product.productName }}</h1>
-  
           <!-- Image centrée réduite -->
 <!-- Image centrée, taille réduite et responsive -->
 <div class="mb-6">
@@ -25,6 +24,10 @@
     class="max-w-[240px] w-auto h-auto mx-auto rounded-md  bg-neutral-100"
   />
 </div>
+          <!-- Badge collection -->
+          <div v-if="product.collection?.collectionName" class="inline-block mb-3 px-3 py-1 rounded-full bg-[#FFB6B0] text-white text-xs font-semibold tracking-wide">
+            {{ product.collection.collectionName }}
+          </div>
 
   
           <!-- Prix -->
@@ -33,13 +36,21 @@
           </p>
   
           <!-- Bouton ajouter au panier -->
-          <button
-            class="w-full sm:w-auto bg-black text-white text-sm font-medium px-6 py-3 rounded hover:bg-neutral-800 transition mb-4"
-            @click="handleAddToCart"
-            :disabled="added"
-          >
-            {{ added ? 'Ajouté !' : 'Ajouter au panier' }}
-          </button>
+          <div class="w-full">
+            <button
+              class="w-1/2 bg-[#FFB6B0] text-white font-semibold py-2 rounded-full hover:bg-[#ff8e7a] transition disabled:opacity-60 mb-4 md:mb-4"
+              @click="handleAddToCart"
+              :disabled="added"
+            >
+              {{ added ? 'Ajouté !' : 'Ajouter au panier' }}
+            </button>
+          </div>
+          <transition name='fade-slide-up'>
+            <div v-if="added" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 bg-[#2a2a22] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 animate-pop-in">
+              <Icon name="lucide:check-circle" class="w-5 h-5 text-[#FFB6B0]" />
+              Produit ajouté au panier !
+            </div>
+          </transition>
 
           <!-- Description avec Voir plus -->
           <div class="text-base text-neutral-700 leading-relaxed mb-6">
@@ -70,11 +81,21 @@
               :productName="p.productName"
               :image="'https://edelweiss-back-production.up.railway.app' + p.productImage.url"
               :price="p.price"
+              :slug="p.slug"
+              :productId="p.id"
+              :productImageObj="p.productImage"
               @click="$router.push(`/product/${p.slug}`)"
+              @add-to-cart="() => handleAddToCartOther(p)"
               class="cursor-pointer transition hover:opacity-90"
             />
           </div>
         </div>
+        <transition name='fade-slide-up'>
+          <div v-if="addedOther" class="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 bg-[#2a2a22] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 animate-pop-in">
+            <Icon name="lucide:check-circle" class="w-5 h-5 text-[#FFB6B0]" />
+            Produit ajouté au panier !
+          </div>
+        </transition>
       </div>
     </div>
   </template>
@@ -92,6 +113,9 @@
     productName: string
     productDescription: string
     price: number
+    collection : {
+      collectionName: string
+    }
     productImage: {
       url: string
       alternativeText?: string
@@ -102,13 +126,16 @@
   const { data: product, pending } = await useAsyncData('product', () =>
     strapi.get<{ data: Product[] }>('products', {
       'filters[slug][$eq]': route.params.slug,
-      pLevel: 10,
+      pLevel: 5,
     }).then(res => res.data?.[0] || null)
   )
+
+  console.log(product)
   
   const { data: allProducts } = await useAsyncData('all-products', () =>
-    strapi.get<{ data: Product[] }>('products', { pLevel: 10 }).then(res => res.data || [])
+    strapi.get<{ data: Product[] }>('products', { pLevel: 5 }).then(res => res.data || [])
   )
+
   
   const otherProducts = computed(() => {
     if (!allProducts.value || !product.value) return []
@@ -137,5 +164,54 @@
     added.value = true
     setTimeout(() => { added.value = false }, 1200)
   }
+
+  const addedOther = ref(false)
+  function handleAddToCartOther(p) {
+    addToCart({
+      id: p.id,
+      productName: p.productName,
+      price: p.price,
+      slug: p.slug,
+      productImage: p.productImage
+    })
+    addedOther.value = true
+    setTimeout(() => { addedOther.value = false }, 1200)
+  }
   </script>
+  
+  <style scoped>
+  @media (max-width: 640px) {
+    .sticky-buy-btn {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      background: #fff;
+      box-shadow: 0 -2px 16px 0 rgba(0,0,0,0.06);
+      padding: 1rem 1.5rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+  }
+  .fade-slide-up-enter-active, .fade-slide-up-leave-active {
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .fade-slide-up-enter-from, .fade-slide-up-leave-to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .fade-slide-up-enter-to, .fade-slide-up-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @keyframes pop-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .animate-pop-in {
+    animation: pop-in 0.4s;
+  }
+  </style>
   

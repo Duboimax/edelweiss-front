@@ -15,7 +15,7 @@ interface Product {
 }
 
 const { data: products, pending, error } = await useAsyncData('products-home', () =>
-  strapi.get<{ data: Product[] }>('products', { pLevel: 10 }).then((res) => res.data || [])
+  strapi.get<{ data: Product[] }>('products', { pLevel: 5 }).then((res) => res.data || [])
 )
 
 const router = useRouter()
