@@ -1,18 +1,19 @@
 <template>
   <section class="bg-[#f5f2e9] py-20 md:py-32">
-    <div class="container px-4 md:px-6 ml-20">
-      <div class="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:gap-16">
-        <div class="flex flex-col justify-center space-y-6">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="grid gap-12 lg:grid-cols-2 items-center">
+        <!-- Texte à gauche -->
+        <div class="space-y-6">
           <div class="space-y-4">
             <h1
               v-if="data.title"
-              class="font-serif text-4xl font-medium tracking-tight sm:text-5xl md:text-6xl text-[#2a2a22]"
+              class="font-serif text-4xl sm:text-5xl md:text-6xl font-medium text-[#2a2a22]"
             >
               {{ data.title }}
             </h1>
             <p
               v-if="data.description"
-              class="text-lg text-[#2a2a22] md:text-xl max-w-[500px]"
+              class="text-lg md:text-xl text-[#2a2a22] max-w-xl"
             >
               {{ data.description }}
             </p>
@@ -20,19 +21,23 @@
           <div v-if="cta">
             <a
               :href="cta.link"
-              class="bg-[#2a2a22] hover:bg-[#3a3a32] text-white rounded-none px-8 py-3 text-lg font-medium transition-colors duration-200"
+              class="inline-block bg-[#2a2a22] hover:bg-[#3a3a32] text-white px-6 py-3 text-base font-semibold transition-colors duration-200"
             >
               {{ cta.buttonName }}
             </a>
           </div>
         </div>
-        <div class="flex items-center justify-center">
-          <img
-            v-if="data.image?.url"
-            :src="data.image.url"
-            :alt="data.image.alternativeText || 'Hero Image'"
-            class="w-full h-auto rounded-lg shadow-lg object-cover"
-          />
+
+        <!-- Image à droite -->
+        <div class="flex justify-center items-center">
+          <div class="w-[400px] h-[400px] bg-[#eeeeee] rounded-lg overflow-hidden shadow-md">
+            <img
+              v-if="data.image?.url"
+              :src="'https://edelweiss-back-production.up.railway.app' + data.image.url"
+              :alt="data.image.alternativeText || 'Hero Image'"
+              class="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </div>
