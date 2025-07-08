@@ -1,18 +1,5 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <section class="bg-[#f5f2e9] py-16 md:py-24">
-      <div class="container mx-auto px-4 md:px-6">
-        <div class="flex flex-col items-center justify-center space-y-4 text-center">
-          <h1 class="font-serif text-4xl font-medium tracking-tight sm:text-5xl md:text-6xl text-[#2a2a22]">
-            Contact Us
-          </h1>
-          <p class="text-lg text-[#5a5a52] md:text-xl max-w-[700px]">
-            We'd love to hear from you. Get in touch with any questions, custom orders, or feedback.
-          </p>
-        </div>
-      </div>
-    </section>
-
     <section class="py-16 md:py-24 bg-[#f9f7f2]">
       <div class="container mx-auto px-4 md:px-6">
         <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
@@ -134,8 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import Map from '~/components/dynamic/Map.vue'
-import QuestionBlock from '~/components/dynamic/QuestionBlock.vue'
+import Title from '~/components/dynamic/Title.vue'
 
 const form = reactive({
   firstName: '',

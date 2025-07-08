@@ -6,7 +6,7 @@
           <h2 class="font-serif text-3xl font-medium text-[#2a2a22]">
             {{ title }}
           </h2>
-          <p class="mt-2 text-[#5a5a52]">
+          <p v-if="subtitle" class="mt-2 text-[#5a5a52]">
             {{ subtitle }}
           </p>
         </div>
@@ -14,7 +14,7 @@
           <Question
             v-for="faq in faqs"
             :key="faq.id"
-            :question="faq.question"
+            :title="faq.title"
             :answer="faq.answer"
             :default-open="faq.defaultOpen"
           />
@@ -25,12 +25,11 @@
 </template>
 
 <script setup lang="ts">
-
 import Question from '~/components/dynamic/Question.vue'
 
 interface FaqData {
   id: number
-  question: string
+  title: string
   answer: string
   defaultOpen?: boolean
 }
@@ -38,13 +37,15 @@ interface FaqData {
 interface Props {
   title?: string
   subtitle?: string
-  faqs: FaqData[]
+  Question: FaqData[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
   title: 'Frequently Asked Questions',
-  subtitle: 'Find answers to common questions about our products and services.'
+  subtitle: '',
 })
+
+const faqs = props.Question
 </script>
 
 <style scoped>

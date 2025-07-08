@@ -57,15 +57,15 @@
 const strapi = useStrapi()
 
 const { data: pageData, pending, error, refresh } = await useAsyncData('page', () =>
-  strapi.get('pages', {
-    'filters[slug][$eq]': 'about',
-    populate: '*',
-    pLevel: '10',
-  }).then((res) => res.data?.[0] || null)
+strapi.get('pages', {
+  'filters[slug][$eq]': 'about',
+  pLevel: '10',
+})
+  .then((res) => res.data?.[0] || null)
 )
 
 
-console.log('Page data:', pageData.value.dynamicZone)
+// console.log('Page data:', pageData.value.dynamicZone)
 
 const getStrapiMedia = (media) => {
   if (!media) return ''

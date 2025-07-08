@@ -14,7 +14,7 @@
         class="font-medium text-lg transition-colors duration-200"
         :class="isOpen ? 'text-[#2a2a22] font-semibold' : 'text-[#2a2a22] group-hover:text-[#1a1a15]'"
       >
-        {{ question }}
+        {{ title }}
       </h3>
       <div 
         class="ml-4 flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300"
@@ -49,16 +49,14 @@
 
 <script setup lang="ts">
 interface Props {
-  question: string
+  title: string
   answer: string
   defaultOpen?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  defaultOpen: false
-})
+const props = defineProps<Props>()
 
-const isOpen = ref(props.defaultOpen)
+const isOpen = ref(props.defaultOpen || false)
 
 const toggleAnswer = () => {
   isOpen.value = !isOpen.value

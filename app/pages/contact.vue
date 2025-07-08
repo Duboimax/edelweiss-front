@@ -33,10 +33,10 @@
     
     <div v-else-if="pageData">
       
-<DynamicZone 
-  v-if="pageData.dynamicZone && pageData.dynamicZone.length > 0" 
-  :components="pageData.dynamicZone" 
-/>
+      <DynamicZone 
+        v-if="pageData.dynamicZone && pageData.dynamicZone.length > 0" 
+        :components="pageData.dynamicZone" 
+      />
 
       
       <div v-else class="container px-4 md:px-6 py-20">
@@ -59,13 +59,12 @@ const strapi = useStrapi()
 const { data: pageData, pending, error, refresh } = await useAsyncData('page', () =>
   strapi.get('pages', {
     'filters[slug][$eq]': 'contact',
-    populate: '*',
-    pLevel: '10',
+     pLevel: '10',
   }).then((res) => res.data?.[0] || null)
 )
 
 
-console.log('Page data:', pageData.value.dynamicZone)
+console.log('Pagse data:', pageData.value)
 
 const getStrapiMedia = (media) => {
   if (!media) return ''
