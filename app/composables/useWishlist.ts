@@ -1,4 +1,3 @@
-// composables/useWishlist.ts
 import { useStrapi } from '~/composables/useStrapi'
 import { useAuth } from '~/composables/useAuth'
 
@@ -19,21 +18,53 @@ interface WishlistItem {
   createdAt: string
 }
 
+// Cache global pour la wishlist
 const globalWishlistItems = ref<WishlistItem[]>([])
-const globalIsLoading = ref(false)
+const globalWishlistLoading = ref(false)
+const globalWishlistFetched = ref(false)
+const globalWishlistLastFetch = ref<number>(0)
+
+// Cache TTL : 2 minutes pour la wishlist (plus courte car données plus sensibles)
+const WISHLIST_CACHE_TTL = 2 * 60 * 1000
 
 export const useWishlist = () => {
   const strapi = useStrapi()
   const { currentUser } = useAuth()
 
-  const fetchWishlist = async () => {
+  const isWishlistDataFresh = () => {
+    return Date.now() - globalWishlistLastFetch.value < WISHLIST_CACHE_TTL
+  }
+
+  const fetchWishlist = async (force = false) => {
     try {
       if (!currentUser.value?.id) {
         globalWishlistItems.value = []
         return []
       }
 
-      globalIsLoading.value = true
+      // Si les données sont fraîches et qu'on ne force pas
+      if (globalWishlistFetched.value && isWishlistDataFresh() && !force) {
+        console.log('📦 Wishlist found in cache')
+        return globalWishlistItems.value
+      }
+
+      // Si déjà en cours de chargement
+      if (globalWishlistLoading.value) {
+        return new Promise((resolve) => {
+          const checkLoading = () => {
+            if (!globalWishlistLoading.value) {
+              resolve(globalWishlistItems.value)
+            } else {
+              setTimeout(checkLoading, 100)
+            }
+          }
+          checkLoading()
+        })
+      }
+
+      globalWishlistLoading.value = true
+      console.log('🔄 Fetching wishlist from API...')
+      
       const response = await strapi.get<{ data: WishlistItem[] }>('wishlists', {
         'filters[user][id][$eq]': currentUser.value.id,
         'populate[products][populate]': 'productImage',
@@ -41,13 +72,17 @@ export const useWishlist = () => {
       })
 
       globalWishlistItems.value = response.data || []
+      globalWishlistFetched.value = true
+      globalWishlistLastFetch.value = Date.now()
+      
+      console.log(`✅ Cached ${globalWishlistItems.value.length} wishlist items`)
       return globalWishlistItems.value
     } catch (error) {
-      console.error('Erreur récupération wishlist:', error)
+      console.error('❌ Error fetching wishlist:', error)
       globalWishlistItems.value = []
       return []
     } finally {
-      globalIsLoading.value = false
+      globalWishlistLoading.value = false
     }
   }
 
@@ -75,10 +110,11 @@ export const useWishlist = () => {
         }
       })
 
-      await fetchWishlist()
+      // Refresh uniquement la wishlist, pas tout
+      await fetchWishlist(true)
       
     } catch (error) {
-      console.error('Erreur ajout wishlist:', error)
+      console.error('❌ Error adding to wishlist:', error)
       throw error
     }
   }
@@ -99,10 +135,14 @@ export const useWishlist = () => {
 
       await strapi.delete(`wishlists/${wishlistItem.documentId}`)
 
-      await fetchWishlist()
+      // Supprime directement du cache local au lieu de re-fetch
+      const index = globalWishlistItems.value.findIndex(item => item.id === wishlistItem.id)
+      if (index >= 0) {
+        globalWishlistItems.value.splice(index, 1)
+      }
       
     } catch (error) {
-      console.error('💥 Erreur suppression wishlist:', error)
+      console.error('❌ Error removing from wishlist:', error)
       throw error
     }
   }
@@ -127,9 +167,10 @@ export const useWishlist = () => {
       
       await Promise.all(deletePromises)
       globalWishlistItems.value = []
+      globalWishlistFetched.value = false
       
     } catch (error) {
-      console.error('Erreur vidage wishlist:', error)
+      console.error('❌ Error clearing wishlist:', error)
       throw error
     }
   }
@@ -138,27 +179,39 @@ export const useWishlist = () => {
     return globalWishlistItems.value.reduce((count, item) => count + item.products.length, 0)
   })
 
-  if (currentUser.value?.id && globalWishlistItems.value.length === 0) {
+  const invalidateWishlistCache = () => {
+    globalWishlistItems.value = []
+    globalWishlistFetched.value = false
+    globalWishlistLastFetch.value = 0
+    console.log('🗑️ Wishlist cache invalidated')
+  }
+
+  // Auto-fetch seulement si pas encore fetché et utilisateur connecté
+  if (currentUser.value?.id && !globalWishlistFetched.value) {
     fetchWishlist()
   }
 
-  watch(() => currentUser.value?.id, (newUserId) => {
-    if (newUserId) {
-      fetchWishlist()
-    } else {
-      globalWishlistItems.value = []
+  // Watch pour clear le cache quand l'utilisateur change
+  watch(() => currentUser.value?.id, (newUserId, oldUserId) => {
+    if (newUserId !== oldUserId) {
+      invalidateWishlistCache()
+      if (newUserId) {
+        fetchWishlist()
+      }
     }
   })
 
   return {
     wishlistItems: readonly(globalWishlistItems),
-    isLoading: readonly(globalIsLoading),
+    isLoading: readonly(globalWishlistLoading),
     wishlistCount,
     fetchWishlist,
     isInWishlist,
     addToWishlist,
     removeFromWishlist,
     toggleWishlist,
-    clearWishlist
+    clearWishlist,
+    invalidateWishlistCache,
+    isWishlistDataFresh
   }
 }

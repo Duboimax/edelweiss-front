@@ -99,7 +99,7 @@
         </div>
 
         <!-- Grille de produits -->
-        <div v-if="pending" class="flex justify-center items-center min-h-[400px]">
+        <div v-if="pending || productsLoading" class="flex justify-center items-center min-h-[400px]">
           <div class="flex flex-col items-center">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFB6B0] mb-4"></div>
             <p class="text-[#5a5a52]">Chargement de nos merveilles...</p>
@@ -109,11 +109,17 @@
         <div v-else-if="error" class="text-center py-16">
           <Icon name="lucide:alert-circle" class="h-12 w-12 text-red-400 mx-auto mb-4" />
           <p class="text-red-600">Oups ! Impossible de charger nos créations pour le moment.</p>
+          <button 
+            @click="fetchAllProducts(true)" 
+            class="mt-4 bg-[#FFB6B0] hover:bg-[#ff8e7a] text-white px-6 py-2 rounded-full transition-colors cursor-pointer"
+          >
+            Réessayer
+          </button>
         </div>
 
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           <ProductCard
-            v-for="(product, index) in products.slice(0, 8)"
+            v-for="(product, index) in featuredProducts"
             :key="product.id"
             :product="product"
             :index="index"
@@ -332,12 +338,20 @@
 import { useRouter } from 'vue-router'
 import { useCart } from '~/composables/useCart'
 import { useAuth } from '~/composables/useAuth'
+import { useProduct } from '~/composables/useProduct'
 import ProductCard from '~/components/cards/product/ProductCard.vue'
 
 const strapi = useStrapi()
 const router = useRouter()
 const { addToCart } = useCart()
 const { isLoggedIn } = useAuth()
+
+const { 
+  products, 
+  isLoading: productsLoading, 
+  fetchAllProducts, 
+  getFeaturedProducts 
+} = useProduct()
 
 interface Product {
   id: number
@@ -350,9 +364,24 @@ interface Product {
   slug: string
 }
 
-const { data: products, pending, error } = await useAsyncData('products-home', () =>
-  strapi.get<{ data: Product[] }>('products', { pLevel: 5 }).then((res) => res.data || [])
-)
+const pending = ref(true)
+const error = ref(false)
+
+onMounted(async () => {
+  try {
+    await fetchAllProducts()
+    console.log('✅ Homepage: Products loaded from cache')
+  } catch (err) {
+    console.error('❌ Homepage: Error loading products:', err)
+    error.value = true
+  } finally {
+    pending.value = false
+  }
+})
+
+const featuredProducts = computed(() => {
+  return getFeaturedProducts(8) // Prend les 8 premiers du cache
+})
 
 // États des notifications
 const showCartNotification = ref(false)
@@ -380,7 +409,7 @@ function handleAddToCart(product: Product) {
   }, 3000)
 }
 
-function handleWishlistToggle(message: string) {
+async function handleWishlistToggle(message: string) {
   wishlistMessage.value = message
   showWishlistNotification.value = true
   setTimeout(() => {
