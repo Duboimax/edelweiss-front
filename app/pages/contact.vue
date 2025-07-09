@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="container mx-auto px-4 max-w-5xl mt-8">
+      <Breadcrumb :items="[
+        { label: 'Accueil', to: '/' },
+        { label: 'Contact', to: null }
+      ]" />
+    </div>
     <Head>
       <title>{{ pageData?.title || 'À propos' }}</title>
       <meta 
@@ -53,8 +59,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import QuestionBloc from '~/components/dynamic/QuestionBloc.vue'
+import Breadcrumb from '~/components/ui/Breadcrumb.vue'
 
 const strapi = useStrapi()
 
@@ -98,19 +105,19 @@ if (process.dev) {
 const faqQuestions = [
   {
     question: 'Combien de temps prend la livraison ?',
-    answer: 'La livraison standard prend généralement 3 à 5 jours ouvrés en France et 7 à 14 jours ouvrés à l’international. Des options express sont disponibles lors du paiement.'
+    answer: 'La livraison standard prend généralement 3 à 5 jours ouvrés en France et 7 à 14 jours ouvrés à l\'international. Des options express sont disponibles lors du paiement.'
   },
   {
     question: 'Acceptez-vous les retours ?',
-    answer: 'Nous acceptons les retours sous 14 jours après réception pour les articles non utilisés et dans leur emballage d’origine. Les commandes personnalisées ne sont pas retournables sauf en cas de défaut.'
+    answer: 'Nous acceptons les retours sous 14 jours après réception pour les articles non utilisés et dans leur emballage d\'origine. Les commandes personnalisées ne sont pas retournables sauf en cas de défaut.'
   },
   {
     question: 'Puis-je demander une commande personnalisée ?',
-    answer: 'Oui ! Nous adorons créer des pièces sur-mesure. Merci d’utiliser le formulaire de contact ci-dessus pour décrire votre projet, nous reviendrons vers vous avec les détails.'
+    answer: 'Oui ! Nous adorons créer des pièces sur-mesure. Merci d\'utiliser le formulaire de contact ci-dessus pour décrire votre projet, nous reviendrons vers vous avec les détails.'
   },
   {
     question: 'Comment entretenir mes articles en crochet ?',
-    answer: 'La plupart de nos créations en crochet doivent être lavées à la main à l’eau froide avec un savon doux, puis séchées à plat. Des instructions spécifiques sont fournies avec chaque produit.'
+    answer: 'La plupart de nos créations en crochet doivent être lavées à la main à l\'eau froide avec un savon doux, puis séchées à plat. Des instructions spécifiques sont fournies avec chaque produit.'
   },
   {
     question: 'Proposez-vous des options pour les professionnels ?',

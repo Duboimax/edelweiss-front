@@ -12,7 +12,10 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss(),
-    ]
+    ],
+    optimizeDeps: {
+      include: ['leaflet'],
+    },
   },
   runtimeConfig: {
     apiUrl: 'NUXT_API_URL',

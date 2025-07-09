@@ -20,6 +20,13 @@
       />
     </Head>
     
+    <div class="container mx-auto px-4 max-w-5xl mt-8">
+      <Breadcrumb :items="[
+        { label: 'Accueil', to: '/' },
+        { label: 'À propos', to: null }
+      ]" />
+    </div>
+    
     <div v-if="pending" class="flex items-center justify-center min-h-screen">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2a2a22]"></div>
     </div>
@@ -53,7 +60,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import Breadcrumb from '~/components/ui/Breadcrumb.vue'
+
 const strapi = useStrapi()
 
 

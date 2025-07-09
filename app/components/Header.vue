@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { useCart } from '~/composables/useCart'
+
 interface NavigationItem {
   name: string
   path: string
 }
 
 // Auth
-const { isLoggedIn, currentUser } = useAuth()
+const { isLoggedIn } = useAuth()
 
 const isMobileMenuOpen = ref<boolean>(false)
 
-const cartCount = ref<number>(3)
+const { count } = useCart()
 
 const navigationItems: NavigationItem[] = [
   { name: 'Accueil', path: '/' },
@@ -17,19 +19,19 @@ const navigationItems: NavigationItem[] = [
   { name: 'Boutique', path: '/shop' },
   { name: 'Collections', path: '/collections' },
   { name: 'Blogs', path: '/blogs' },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
 ]
 
 // Auth items conditionnels
 const authItems = computed((): NavigationItem[] => {
   if (isLoggedIn.value) {
     return [
-      { name: 'Dashboard', path: '/dashboard' }
+      { name: 'Dashboard', path: '/dashboard' },
     ]
   } else {
     return [
       { name: 'Login', path: '/login' },
-      { name: 'Register', path: '/register' }
+      { name: 'Register', path: '/register' },
     ]
   }
 })
@@ -62,7 +64,7 @@ watchEffect(() => {
   <header class="w-full bg-[#f5f2e9] pt-0 shadow-lg">
     <!-- Bannière promo -->
     <div class="w-full bg-[#FFB6B0] text-white text-center py-2 px-4 font-semibold text-sm tracking-wide shadow-sm fixed top-0 left-0 right-0 z-50" style="margin-top:0;">
-      🎁 Livraison offerte dès 60€ d’achat ! Profitez-en aujourd’hui 💝
+      🎁 Livraison offerte dès 60€ d'achat ! Profitez-en aujourd'hui 💝
     </div>
     <div style="height:36px;"></div>
     <div class="container mx-auto flex items-center justify-between px-4 md:px-10 py-3 md:py-4">
@@ -95,9 +97,9 @@ watchEffect(() => {
         </NuxtLink>
         <NuxtLink to="/cart" class="relative text-[#2a2a22] transition-colors hover:text-[#5a5a52]" aria-label="Panier">
           <Icon name="lucide:shopping-bag" class="h-5 w-5" />
-          <span v-if="cartCount > 0"
+          <span v-if="count > 0"
             class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#2a2a22] text-[10px] font-medium text-white">
-            {{ cartCount }}
+            {{ count }}
           </span>
         </NuxtLink>
         <button @click="toggleMobileMenu"
@@ -144,8 +146,8 @@ watchEffect(() => {
 
             <NuxtLink to="/cart"
               class="text-lg font-medium text-[#2a2a22] transition-colors hover:underline underline-offset-4"
-              :class="{ 'underline': $route.path === '/cart' }" @click="closeMobileMenu">
-              Panier ({{ cartCount }})
+              :class="{ underline: $route.path === '/cart' }" @click="closeMobileMenu">
+              Panier ({{ count }})
             </NuxtLink>
           </nav>
         </div>
