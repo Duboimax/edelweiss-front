@@ -1,11 +1,5 @@
 <template>
   <div class="min-h-screen">
-    <div class="container mx-auto px-4 max-w-5xl mt-8">
-      <Breadcrumb :items="[
-        { label: 'Accueil', to: '/' },
-        { label: 'À propos', to: null }
-      ]" />
-    </div>
     <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2] w-full pb-24">
       <div class="container mx-auto px-4 md:px-8 pt-8">
         <div v-if="pending" class="flex justify-center items-center min-h-[300px]">
