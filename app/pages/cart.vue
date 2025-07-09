@@ -3,6 +3,7 @@ import { useCart } from '~/composables/useCart'
 import { useStrapi } from '~/composables/useStrapi'
 import { useOrder } from '~/composables/useOrder'
 import { useAuth } from '~/composables/useAuth'
+import Breadcrumb from '~/components/ui/Breadcrumb.vue'
 
 const { cart, updateQuantity, removeFromCart, clearCart, total, addToCart } = useCart()
 const strapi = useStrapi()
@@ -75,6 +76,12 @@ async function handleOrder() {
 
 <template>
   <div class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 max-w-5xl mt-8">
+      <Breadcrumb :items="[
+        { label: 'Accueil', to: '/' },
+        { label: 'Panier', to: null }
+      ]" />
+    </div>
     <!-- Header avec breadcrumb -->
     <div class="bg-white shadow-sm border-b">
       <div class="container mx-auto px-4 py-4 max-w-7xl">

@@ -1,5 +1,11 @@
 <template>
   <div class="flex min-h-screen flex-col">
+    <div class="container mx-auto px-4 max-w-5xl mt-8">
+      <Breadcrumb :items="[
+        { label: 'Accueil', to: '/' },
+        { label: 'Inscription', to: null }
+      ]" />
+    </div>
     <section class="py-12 md:py-16 bg-[#f9f7f2] flex-1 flex items-center justify-center">
       <div class="container mx-auto px-4 md:px-6">
         <div class="mx-auto max-w-md space-y-6 bg-[#f5f2e9] p-8 border border-[#e6e2d7]">
@@ -130,6 +136,7 @@
 
 <script setup lang="ts">
 import { useAuth } from '~/composables/useAuth'
+import Breadcrumb from '~/components/ui/Breadcrumb.vue'
 useHead({
   title: 'Inscription - Audelweiss',
   meta: [

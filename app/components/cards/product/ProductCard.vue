@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCart } from '~/composables/useCart'
 import { defineEmits } from 'vue'
-import { marked } from 'marked'
 
 const props = defineProps<{
   productName: string,
