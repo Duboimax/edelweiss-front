@@ -90,10 +90,10 @@ const currentYear = computed(() => new Date().getFullYear())
         <p class="text-sm text-[#5a5a52]">© {{ currentYear }} Audelweiss. All rights reserved.</p>
         <div class="flex items-center gap-6">
           <NuxtLink to="/privacy" class="text-sm text-[#5a5a52] transition-colors hover:text-[#2a2a22] hover:underline underline-offset-2">
-            Privacy Policy
+            Politique de confidentialité
           </NuxtLink>
-          <NuxtLink to="/terms" class="text-sm text-[#5a5a52] transition-colors hover:text-[#2a2a22] hover:underline underline-offset-2">
-            Terms of Service
+          <NuxtLink to="/cgv" class="text-sm text-[#5a5a52] transition-colors hover:text-[#2a2a22] hover:underline underline-offset-2">
+            Conditions Générales de Vente
           </NuxtLink>
         </div>
       </div>

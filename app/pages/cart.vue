@@ -3,6 +3,7 @@ import { useCart } from '~/composables/useCart'
 import { useStrapi } from '~/composables/useStrapi'
 import { useAuth } from '~/composables/useAuth'
 import Breadcrumb from '~/components/ui/Breadcrumb.vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 const { cart, updateQuantity, removeFromCart, clearCart, total, addToCart } = useCart()
 const strapi = useStrapi()
@@ -56,6 +57,49 @@ const orderSuccess = ref(false)
 const orderError = ref('')
 
 const isLoggedIn = computed(() => !!currentUser && !!currentUser.value)
+
+// Gestion du code promo fidélité
+const promoCodeInput = ref('')
+const appliedPromo = ref('')
+const promoError = ref('')
+const promoSuccess = ref('')
+const promoDiscount = ref(0)
+
+function loadLoyaltyPromoCodes() {
+  // Les codes promos fidélité sont stockés dans le localStorage (par le dashboard lors de la réclamation)
+  const codes = localStorage.getItem('loyaltyPromoCodes')
+  if (!codes) return []
+  try {
+    return JSON.parse(codes)
+  } catch {
+    return []
+  }
+}
+
+function applyPromoCode() {
+  promoError.value = ''
+  promoSuccess.value = ''
+  const codes = loadLoyaltyPromoCodes()
+  const code = promoCodeInput.value.trim()
+  if (!code) {
+    promoError.value = 'Veuillez entrer un code.'
+    return
+  }
+  if (codes.includes(code)) {
+    appliedPromo.value = code
+    promoDiscount.value = 20
+    promoSuccess.value = 'Code promo appliqué : -20€ sur votre commande.'
+    promoError.value = ''
+  } else {
+    promoError.value = 'Code promo invalide ou déjà utilisé.'
+    appliedPromo.value = ''
+    promoDiscount.value = 0
+  }
+}
+
+const totalWithPromo = computed(() => {
+  return Math.max(total.value - promoDiscount.value, 0)
+})
 
 async function handleOrder() {
   orderLoading.value = true
@@ -332,7 +376,7 @@ function handleCommander() {
               <div class="border-t pt-4">
                 <div class="flex justify-between items-center mb-6">
                   <span class="text-xl font-bold text-gray-900">Total</span>
-                  <span class="text-2xl font-bold text-gray-900">{{ total.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</span>
+                  <span class="text-2xl font-bold text-gray-900">{{ totalWithPromo.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</span>
                 </div>
               </div>
 
@@ -354,13 +398,17 @@ function handleCommander() {
                 <div class="flex gap-2">
                   <input
                     type="text"
+                    v-model="promoCodeInput"
                     placeholder="Code promo"
                     class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black transition-colors"
                   />
-                  <button class="bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                  <button @click="applyPromoCode" class="bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                     Appliquer
                   </button>
                 </div>
+                <div v-if="promoSuccess" class="text-green-600 text-center font-semibold mt-2">{{ promoSuccess }}</div>
+                <div v-if="promoError" class="text-red-600 text-center font-semibold mt-2">{{ promoError }}</div>
+                <div v-if="appliedPromo" class="text-xs text-center text-gray-500 mt-1">Code utilisé : {{ appliedPromo }}</div>
               </div>
 
               <!-- Paiement sécurisé -->
