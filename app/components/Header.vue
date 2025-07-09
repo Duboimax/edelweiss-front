@@ -4,6 +4,9 @@ interface NavigationItem {
   path: string
 }
 
+// Auth
+const { isLoggedIn, currentUser } = useAuth()
+
 const isMobileMenuOpen = ref<boolean>(false)
 
 const cartCount = ref<number>(3)
@@ -16,10 +19,19 @@ const navigationItems: NavigationItem[] = [
   { name: 'Contact', path: '/contact' }
 ]
 
-const authItems: NavigationItem[] = [
-  { name: 'Login', path: '/login' },
-  { name: 'Register', path: '/register' }
-]
+// Auth items conditionnels
+const authItems = computed((): NavigationItem[] => {
+  if (isLoggedIn.value) {
+    return [
+      { name: 'Dashboard', path: '/dashboard' }
+    ]
+  } else {
+    return [
+      { name: 'Login', path: '/login' },
+      { name: 'Register', path: '/register' }
+    ]
+  }
+})
 
 const toggleMobileMenu = (): void => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -35,7 +47,7 @@ watch(() => route.path, () => {
 })
 
 watchEffect(() => {
-  if (process.client) {
+  if (typeof window !== 'undefined') {
     if (isMobileMenuOpen.value) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -74,8 +86,13 @@ watchEffect(() => {
       </nav>
 
       <div class="flex items-center gap-4">
-        <NuxtLink to="/login" class="text-[#2a2a22] transition-colors hover:text-[#5a5a52]" aria-label="Mon compte">
-          <Icon name="lucide:user" class="h-5 w-5" />
+        <!-- Icône conditionnelle: Dashboard si connecté, Login si pas connecté -->
+        <NuxtLink 
+          :to="isLoggedIn ? '/dashboard' : '/login'" 
+          class="text-[#2a2a22] transition-colors hover:text-[#5a5a52]" 
+          :aria-label="isLoggedIn ? 'Mon dashboard' : 'Se connecter'"
+        >
+          <Icon :name="isLoggedIn ? 'lucide:layout-dashboard' : 'lucide:user'" class="h-5 w-5" />
         </NuxtLink>
 
         <NuxtLink to="/cart" class="relative text-[#2a2a22] transition-colors hover:text-[#5a5a52]" aria-label="Panier">
@@ -121,6 +138,7 @@ watchEffect(() => {
 
             <div class="my-2 h-px bg-[#e6e2d7]" />
 
+            <!-- Menu auth conditionnel -->
             <NuxtLink v-for="item in authItems" :key="item.name" :to="item.path"
               class="text-lg font-medium text-[#2a2a22] transition-colors hover:underline underline-offset-4"
               :class="{ 'underline': $route.path === item.path }" @click="closeMobileMenu">
