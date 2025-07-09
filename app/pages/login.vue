@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen flex-col">
+  <div class="flex flex-col">
     <section class="py-12 md:py-16 bg-[#f9f7f2] flex-1 flex items-center justify-center">
       <div class="container mx-auto px-4 md:px-6">
         <div class="mx-auto max-w-md space-y-6 bg-[#f5f2e9] p-8 border border-[#e6e2d7]">

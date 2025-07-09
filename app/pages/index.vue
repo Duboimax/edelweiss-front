@@ -27,7 +27,7 @@ function handleAddToCart(product) {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2] min-h-screen">
+  <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2]">
     <!-- HERO -->
     <section class="relative flex flex-col items-center justify-center text-center py-28 px-4 overflow-hidden">
       <div class="absolute inset-0 pointer-events-none z-0">

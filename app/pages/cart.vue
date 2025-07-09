@@ -74,7 +74,7 @@ async function handleOrder() {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+  <div class="bg-gradient-to-br from-gray-50 to-gray-100">
     <!-- Header avec breadcrumb -->
     <div class="bg-white shadow-sm border-b">
       <div class="container mx-auto px-4 py-4 max-w-7xl">

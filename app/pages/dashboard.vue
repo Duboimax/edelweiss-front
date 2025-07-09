@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f9f7f2]">
+  <div class="bg-[#f9f7f2]">
     <!-- Navigation Header -->
     <nav class="bg-white border-b border-[#e6e2d7] px-6 py-4">
       <div class="flex items-center justify-between">
