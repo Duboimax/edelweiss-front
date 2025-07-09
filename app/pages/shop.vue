@@ -3,6 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { onMounted, watch, watchEffect } from 'vue'
 import ProductCard from '~/components/cards/product/ProductCard.vue'
 import { useCart } from '~/composables/useCart'
+import Breadcrumb from '~/components/ui/Breadcrumb.vue'
 
 const strapi = useStrapi()
 
@@ -78,6 +79,12 @@ function getBadge(product: Product, index: number) {
 <template>
   <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2] min-h-screen">
     <div class="container mx-auto px-4 md:px-6 py-12">
+      <div class="container mx-auto px-4 max-w-5xl mt-8">
+        <Breadcrumb :items="[
+          { label: 'Accueil', to: '/' },
+          { label: 'Boutique', to: null }
+        ]" />
+      </div>
       <h1 class="font-serif text-4xl font-medium tracking-tight text-[#2a2a22] mb-8 text-center">Boutique</h1>
 
       <div class="flex flex-col md:flex-row gap-10">
