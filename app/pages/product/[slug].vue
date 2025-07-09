@@ -154,7 +154,7 @@ interface Product {
 const { data: product, pending } = await useAsyncData('product', () =>
   strapi.get<{ data: Product[] }>('products', {
     'filters[slug][$eq]': route.params.slug,
-    pLevel: 5,
+    pLevel: 4,
   }).then(res => res.data?.[0] || null)
 )
 

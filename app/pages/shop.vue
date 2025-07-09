@@ -77,103 +77,122 @@ function getBadge(product: Product, index: number) {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2] min-h-screen">
-    <div class="container mx-auto px-4 md:px-6 py-12">
-      <div class="container mx-auto px-4 max-w-5xl mt-8">
-        <Breadcrumb :items="[
-          { label: 'Accueil', to: '/' },
-          { label: 'Boutique', to: null }
-        ]" />
-      </div>
-      <h1 class="font-serif text-4xl font-medium tracking-tight text-[#2a2a22] mb-8 text-center">Boutique</h1>
+  <div class="min-h-screen">
+    <div class="container mx-auto px-4 max-w-5xl mt-8">
+      <Breadcrumb :items="[
+        { label: 'Accueil', to: '/' },
+        { label: 'Boutique', to: null }
+      ]" />
+    </div>
+    <div class="bg-gradient-to-br from-[#fffafd] via-[#fff6fa] to-[#f9f7f2] w-full">
+      <div class="container mx-auto px-4 md:px-6 py-12">
+        <h1 class="font-serif text-4xl font-bold tracking-tight text-[#2a2a22] mb-10 text-center drop-shadow-sm">Boutique</h1>
+        <div class="flex flex-col md:flex-row gap-10">
+          <!-- Sidebar filtres -->
+          <aside class="md:w-1/4 w-full">
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-[#f3e7e7] mt-4 sticky top-10">
+              <!-- Catégories -->
+              <div class="mb-8">
+                <h2 class="text-xs font-bold text-[#FFB6B0] uppercase tracking-widest mb-4">Catégories</h2>
+                <div class="space-y-3">
+                  <label class="flex items-center gap-3 text-base text-[#2a2a22] cursor-pointer">
+                    <input type="radio" v-model="selectedCollection" :value="null" class="accent-[#FFB6B0] w-4 h-4" />
+                    <span :class="{'font-semibold text-[#FFB6B0]': !selectedCollection}">Toutes les catégories</span>
+                  </label>
+                  <label
+                    v-for="cat in collections"
+                    :key="cat.id"
+                    class="flex items-center gap-3 text-base text-[#2a2a22] cursor-pointer"
+                  >
+                    <input type="radio" v-model="selectedCollection" :value="cat.collectionName" class="accent-[#FFB6B0] w-4 h-4" />
+                    <span :class="{'font-semibold text-[#FFB6B0]': selectedCollection === cat.collectionName}">{{ cat.collectionName }}</span>
+                  </label>
+                </div>
+              </div>
 
-      <div class="flex flex-col md:flex-row gap-10">
-        <!-- Sidebar filtres -->
-        <aside class="md:w-1/4 w-full">
-          <div class="bg-white rounded-xl shadow-md p-6 border border-[#dcdcd4]">
-            <!-- Catégories -->
-            <div class="mb-6">
-              <h2 class="text-lg font-semibold text-[#2a2a22] mb-2">Catégories</h2>
-              <div class="space-y-2">
-                <label class="flex items-center gap-2 text-sm text-[#2a2a22]">
-                  <input type="radio" v-model="selectedCollection" :value="null" class="form-radio text-[#FFB6B0]" />
-                  Toutes les catégories
-                </label>
-                <label
-                  v-for="cat in collections"
-                  :key="cat.id"
-                  class="flex items-center gap-2 text-sm text-[#2a2a22]"
-                >
-                  <input type="radio" v-model="selectedCollection" :value="cat.collectionName" class="form-radio text-[#FFB6B0]" />
-                  {{ cat.collectionName }}
-                </label>
+              <!-- Tri par prix -->
+              <div class="mb-2">
+                <h2 class="text-xs font-bold text-[#FFB6B0] uppercase tracking-widest mb-4">Trier par prix</h2>
+                <div class="space-y-3">
+                  <label class="flex items-center gap-3 text-base text-[#2a2a22] cursor-pointer">
+                    <input type="radio" v-model="sortOrder" :value="null" class="accent-[#FFB6B0] w-4 h-4" />
+                    <span :class="{'font-semibold text-[#FFB6B0]': !sortOrder}">Par défaut</span>
+                  </label>
+                  <label class="flex items-center gap-3 text-base text-[#2a2a22] cursor-pointer">
+                    <input type="radio" v-model="sortOrder" value="asc" class="accent-[#FFB6B0] w-4 h-4" />
+                    <span :class="{'font-semibold text-[#FFB6B0]': sortOrder === 'asc'}">Prix croissant</span>
+                  </label>
+                  <label class="flex items-center gap-3 text-base text-[#2a2a22] cursor-pointer">
+                    <input type="radio" v-model="sortOrder" value="desc" class="accent-[#FFB6B0] w-4 h-4" />
+                    <span :class="{'font-semibold text-[#FFB6B0]': sortOrder === 'desc'}">Prix décroissant</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Liste des produits -->
+          <main class="md:w-3/4 w-full">
+            <div v-if="pending" class="flex justify-center items-center min-h-[300px]">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFB6B0]"></div>
+            </div>
+
+            <div v-else-if="error" class="text-center text-red-600 py-12">
+              <div class="inline-flex flex-col items-center gap-2">
+                <Icon name="lucide:alert-circle" class="w-8 h-8 text-[#FFB6B0]" />
+                <span>Erreur lors du chargement des produits.</span>
               </div>
             </div>
 
-            <!-- Tri par prix -->
-            <div class="mb-6">
-              <h2 class="text-lg font-semibold text-[#2a2a22] mb-2">Trier par prix</h2>
-              <div class="space-y-2">
-                <label class="flex items-center gap-2 text-sm text-[#2a2a22]">
-                  <input type="radio" v-model="sortOrder" :value="null" class="form-radio text-[#FFB6B0]" />
-                  Par défaut
-                </label>
-                <label class="flex items-center gap-2 text-sm text-[#2a2a22]">
-                  <input type="radio" v-model="sortOrder" value="asc" class="form-radio text-[#FFB6B0]" />
-                  Prix croissant
-                </label>
-                <label class="flex items-center gap-2 text-sm text-[#2a2a22]">
-                  <input type="radio" v-model="sortOrder" value="desc" class="form-radio text-[#FFB6B0]" />
-                  Prix décroissant
-                </label>
+            <div v-else>
+              <div class="mb-6 flex items-center gap-3">
+                <span class="inline-block bg-[#FFB6B0]/10 text-[#FFB6B0] font-semibold px-4 py-1 rounded-full text-xs">
+                  {{ sortedProducts.length }} produit{{ sortedProducts.length > 1 ? 's' : '' }} trouvé{{ sortedProducts.length > 1 ? 's' : '' }}
+                </span>
               </div>
-            </div>
-          </div>
-        </aside>
 
-        <!-- Liste des produits -->
-        <main class="md:w-3/4 w-full">
-          <div v-if="pending" class="flex justify-center items-center min-h-[300px]">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2a2a22]"></div>
-          </div>
-
-          <div v-else-if="error" class="text-center text-red-600 py-12">
-            Erreur lors du chargement des produits.
-          </div>
-
-          <div v-else>
-            <div class="mb-4 text-sm text-[#2a2a22] font-medium">
-              {{ sortedProducts.length }} produit{{ sortedProducts.length > 1 ? 's' : '' }} trouvé{{ sortedProducts.length > 1 ? 's' : '' }}.
-            </div>
-
-            <div
-              v-if="sortedProducts.length > 0"
-              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
               <div
-                v-for="(product, i) in sortedProducts"
-                :key="product.id"
-                @click="goToProduct(product.slug)"
-                class="cursor-pointer"
+                v-if="sortedProducts.length > 0"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                <ProductCard
-                  :productName="product.productName"
-                  :image="'https://edelweiss-back-production.up.railway.app' + product.productImage.url"
-                  :price="product.price"
-                  :slug="product.slug"
-                  :productId="product.id"
-                  :productImageObj="product.productImage"
-                  :badge="getBadge(product, i)"
-                  @click.stop="goToProduct(product.slug)"
-                />
+                <div
+                  v-for="(product, i) in sortedProducts"
+                  :key="product.id"
+                  @click="goToProduct(product.slug)"
+                  class="cursor-pointer group"
+                >
+                  <div class="bg-white rounded-2xl shadow-lg border border-[#f3e7e7] flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 h-full min-h-[420px]">
+                    <div class="relative w-full aspect-square overflow-hidden rounded-t-2xl">
+                      <img
+                        :src="'https://edelweiss-back-production.up.railway.app' + product.productImage.url"
+                        :alt="product.productName"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <span v-if="getBadge(product, i)" class="absolute top-4 left-4 bg-[#FFB6B0] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">
+                        {{ getBadge(product, i) }}
+                      </span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-between p-6 min-h-[120px]">
+                      <h3 class="font-serif text-lg font-bold text-[#2a2a22] mb-2 line-clamp-2 min-h-[48px]">{{ product.productName }}</h3>
+                      <div class="text-base font-semibold text-[#5a5a52] mb-4">{{ product.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</div>
+                      <button
+                        class="w-full bg-[#FFB6B0] text-white font-semibold py-2 rounded-full shadow-md hover:bg-[#ff8e7a] transition-all duration-200 active:scale-95"
+                        @click.stop="addToCart(product)"
+                      >
+                        Ajouter au panier
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else class="text-center py-16 flex flex-col items-center gap-4">
+                <Icon name="lucide:package" class="w-12 h-12 text-[#FFB6B0]" />
+                <p class="text-[#5a5a52] text-lg">Aucun produit disponible dans cette sélection.</p>
               </div>
             </div>
-
-            <div v-else class="text-center py-12">
-              <p class="text-gray-600">Aucun produit disponible dans cette sélection.</p>
-            </div>
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   </div>
