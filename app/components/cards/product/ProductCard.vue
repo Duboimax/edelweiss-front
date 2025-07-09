@@ -23,7 +23,6 @@
           class="h-5 w-5 transition-all duration-200"
           :class="{ 'fill-current': isInWishlist(props.productId) }"
         />
-         {{ props.productId }}
       </button>
      
     </div>
