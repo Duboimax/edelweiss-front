@@ -75,10 +75,7 @@ export const useStrapi = () => {
       try {
         const headers: any = {
           'Content-Type': 'application/json',
-        }
-        
-        if (token) {
-          headers.Authorization = `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
 
         return await $fetch<T>(`${baseURL}/api/${endpoint}`, {

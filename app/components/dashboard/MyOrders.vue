@@ -31,7 +31,7 @@
         </div>
         <div class="flex flex-col items-end gap-2 min-w-[140px]">
           <span class="font-serif text-xl text-[#2a2a22]">Total : {{ order.total }}€</span>
-          <button @click="openDetail(order)" class="text-sm text-[#2a2a22] hover:underline font-medium mt-2">Voir détails</button>
+          <button @click="openDetail(order)" class="text-sm text-[#2a2a22] cursor-pointer hover:underline font-medium mt-2">Voir détails</button>
         </div>
       </div>
       <div v-if="orders.length === 0" class="text-center text-[#5a5a52] py-8">Aucune commande pour le moment.</div>
@@ -41,7 +41,7 @@
     <transition name="fade-slide-up">
       <div v-if="showDetail && selectedOrder" class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/30 backdrop-blur-sm">
         <div class="bg-white rounded-t-2xl md:rounded-2xl shadow-2xl w-full max-w-lg mx-auto p-8 relative animate-pop-in">
-          <button @click="closeDetail" class="absolute top-4 right-4 text-[#2a2a22] hover:text-[#FFB6B0] text-xl font-bold">&times;</button>
+          <button @click="closeDetail" class="absolute top-4 right-4 text-[#2a2a22] hover:text-[#FFB6B0] text-xl cursor-pointer font-bold">&times;</button>
           <h2 class="font-serif text-2xl text-[#2a2a22] mb-2">Commande #{{ selectedOrder.id }}</h2>
           <p class="text-[#5a5a52] mb-4">Passée le {{ selectedOrder.date || '—' }}</p>
           <div class="flex flex-col gap-4 mb-6">
