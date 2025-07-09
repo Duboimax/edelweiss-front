@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCart } from '~/composables/useCart'
 import { defineEmits } from 'vue'
+import { marked } from 'marked'
 
 const props = defineProps<{
   productName: string,
@@ -10,7 +11,8 @@ const props = defineProps<{
   productId?: number,
   productImageObj?: { url: string, alternativeText?: string },
   badge?: string,
-  onAddToCart?: () => void
+  onAddToCart?: () => void,
+  description?: string // Ajout de la prop description
 }>()
 
 const { addToCart } = useCart()
@@ -54,6 +56,14 @@ function handleAddToCart() {
     </div>
     <div class="p-5 flex-1 flex flex-col justify-between text-center">
       <h3 class="font-serif text-lg font-medium text-[#2a2a22] mb-1">{{ props.productName }}</h3>
+      <div v-if="props.description" class="text-[#5a5a52] text-base mb-6 text-left">
+        <p
+          v-for="(para, i) in props.description.split(/(\r\n|\n|\r){2,}/).filter(p => p.trim() !== '')"
+          :key="i"
+          class="mb-3 whitespace-pre-line"
+        >{{ para }}</p>
+      </div>
+      <!-- Description ou autre contenu ici si besoin, mais PAS blog.content -->
       <div class="text-base font-semibold text-[#5a5a52]">{{ props.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</div>
       <button
         class="mt-4 w-full bg-[#FFB6B0] text-white font-semibold py-2 rounded-full hover:bg-[#ff8e7a] transition disabled:opacity-60"
