@@ -6,10 +6,10 @@
           <div class="space-y-6">
             <div>
               <h2 class="font-serif text-2xl md:text-3xl font-medium text-[#2a2a22]">
-                Get in Touch
+                Contactez-nous
               </h2>
               <p class="mt-2 text-[#5a5a52] text-base md:text-lg">
-                Fill out the form and we'll get back to you as soon as possible.
+                Remplissez le formulaire et nous vous répondrons dès que possible.
               </p>
             </div>
             <div class="space-y-4">
@@ -23,7 +23,7 @@
               </div>
               <div class="space-y-2">
                 <h3 class="font-medium text-[#2a2a22] text-base">
-                  Phone
+                  Téléphone
                 </h3>
                 <p class="text-[#5a5a52] text-sm">
                   +33 1 23 45 67 89
@@ -31,18 +31,18 @@
               </div>
               <div class="space-y-2">
                 <h3 class="font-medium text-[#2a2a22] text-base">
-                  Studio
+                  Atelier
                 </h3>
                 <p class="text-[#5a5a52] text-sm">
-                  123 Artisan Street<br />75001 Paris<br />France
+                  123 rue de l'Artisan<br />75001 Paris<br />France
                 </p>
               </div>
               <div class="space-y-2">
                 <h3 class="font-medium text-[#2a2a22] text-base">
-                  Hours
+                  Horaires
                 </h3>
                 <p class="text-[#5a5a52] text-sm">
-                  Monday - Friday: 9am - 6pm<br />Saturday: 10am - 4pm<br />Sunday: Closed
+                  Lundi - Vendredi : 9h - 18h<br />Samedi : 10h - 16h<br />Dimanche : Fermé
                 </p>
               </div>
             </div>
@@ -51,47 +51,47 @@
             <form @submit.prevent="submitForm" class="space-y-6">
               <div class="grid gap-4 sm:grid-cols-2">
                 <div class="space-y-2">
-                  <label for="first-name" class="text-sm font-medium text-[#2a2a22]">First name</label>
-                  <input id="first-name" v-model="form.firstName" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Enter your first name" />
+                  <label for="first-name" class="text-sm font-medium text-[#2a2a22]">Prénom</label>
+                  <input id="first-name" v-model="form.firstName" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Entrez votre prénom" />
                 </div>
                 <div class="space-y-2">
-                  <label for="last-name" class="text-sm font-medium text-[#2a2a22]">Last name</label>
-                  <input id="last-name" v-model="form.lastName" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Enter your last name" />
+                  <label for="last-name" class="text-sm font-medium text-[#2a2a22]">Nom</label>
+                  <input id="last-name" v-model="form.lastName" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Entrez votre nom" />
                 </div>
               </div>
               <div class="space-y-2">
                 <label for="email" class="text-sm font-medium text-[#2a2a22]">Email</label>
-                <input id="email" v-model="form.email" type="email" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Enter your email" />
+                <input id="email" v-model="form.email" type="email" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Entrez votre email" />
               </div>
               <div class="space-y-2">
-                <label for="subject" class="text-sm font-medium text-[#2a2a22]">Subject</label>
+                <label for="subject" class="text-sm font-medium text-[#2a2a22]">Sujet</label>
                 <select id="subject" v-model="form.subject" class="w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none">
                   <option value="">
-                    Select a subject
+                    Sélectionnez un sujet
                   </option>
                   <option value="general">
-                    General Inquiry
+                    Demande générale
                   </option>
                   <option value="order">
-                    Order Status
+                    Suivi de commande
                   </option>
                   <option value="custom">
-                    Custom Order
+                    Commande personnalisée
                   </option>
                   <option value="wholesale">
-                    Wholesale
+                    Revendeur
                   </option>
                   <option value="other">
-                    Other
+                    Autre
                   </option>
                 </select>
               </div>
               <div class="space-y-2">
                 <label for="message" class="text-sm font-medium text-[#2a2a22]">Message</label>
-                <textarea id="message" v-model="form.message" class="h-32 w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Enter your message"></textarea>
+                <textarea id="message" v-model="form.message" class="h-32 w-full rounded-none border border-[#e6e2d7] bg-transparent px-3 py-2 focus:border-[#2a2a22] focus:outline-none" placeholder="Entrez votre message"></textarea>
               </div>
               <button type="submit" :disabled="isSubmitting" class="w-full bg-[#2a2a22] hover:bg-[#3a3a32] text-white rounded-none px-6 py-3 transition-colors cursor-pointer disabled:opacity-50">
-                {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+                {{ isSubmitting ? 'Envoi en cours...' : 'Envoyer le message' }}
               </button>
             </form>
           </div>
@@ -102,7 +102,10 @@
 </template>
 
 <script setup lang="ts">
+import { useStrapi } from '~/composables/useStrapi'
 // import Title from '~/components/dynamic/Title.vue' // plus utilisé
+
+const strapi = useStrapi()
 
 const form = reactive({
   firstName: '',
@@ -117,19 +120,25 @@ const isSubmitting = ref(false)
 const submitForm = async () => {
   isSubmitting.value = true
   try {
-    console.log('Form submitted:', form)
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000)
+    // Insertion en base Strapi (table Contact)
+    await strapi.post('contacts', {
+      data: {
+        firstName: form.firstName,
+        name: form.lastName,
+        email: form.email,
+        subject: form.subject,
+        message: form.message,
+      }
     })
     form.firstName = ''
     form.lastName = ''
     form.email = ''
     form.subject = ''
     form.message = ''
-    alert('Message sent successfully!')
+    alert('Message envoyé avec succès !')
   } catch (error) {
-    console.error('Error sending message:', error)
-    alert('Error sending message. Please try again.')
+    console.error('Erreur lors de l\'envoi du message :', error)
+    alert('Erreur lors de l\'envoi du message. Veuillez réessayer.')
   } finally {
     isSubmitting.value = false
   }
@@ -137,9 +146,9 @@ const submitForm = async () => {
 
 // SEO
 useHead({
-  title: 'Contact Us - Audelweiss',
+  title: 'Contact - Audelweiss',
   meta: [
-    { name: 'description', content: 'Get in touch with Audelweiss. Contact us for custom orders, questions, or feedback.' },
+    { name: 'description', content: 'Contactez Audelweiss. Écrivez-nous pour une commande personnalisée, une question ou un retour.' },
   ],
 })
 </script>
