@@ -55,6 +55,8 @@ const orderLoading = ref(false)
 const orderSuccess = ref(false)
 const orderError = ref('')
 
+const isLoggedIn = computed(() => !!currentUser && !!currentUser.value)
+
 async function handleOrder() {
   orderLoading.value = true
   orderError.value = ''
@@ -84,6 +86,14 @@ async function handleOrder() {
     orderError.value = (e instanceof Error ? e.message : 'Erreur lors de la commande.')
   } finally {
     orderLoading.value = false
+  }
+}
+
+function handleCommander() {
+  if (!isLoggedIn.value) {
+    window.location.href = '/login'
+  } else {
+    window.location.href = '/checkout'
   }
 }
 </script>
@@ -328,12 +338,12 @@ async function handleOrder() {
 
               <!-- Boutons d'action -->
               <div class="space-y-3">
-                <NuxtLink
-                  to="/checkout"
+                <button
                   class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2 flex items-center justify-center text-center"
+                  @click="handleCommander"
                 >
-                  Commander
-                </NuxtLink>
+                  {{ isLoggedIn ? 'Commander' : 'Se connecter pour commander' }}
+                </button>
                 <div v-if="orderSuccess" class="text-green-600 text-center font-semibold mt-2">Commande passée avec succès !</div>
                 <div v-if="orderError" class="text-red-600 text-center font-semibold mt-2">{{ orderError }}</div>
                 <div class="text-xs text-gray-500 text-center mt-2">Paiement sécurisé • Retours sous 30 jours • Livraison offerte dès 60€</div>

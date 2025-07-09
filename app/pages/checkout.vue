@@ -132,6 +132,10 @@ async function handleCheckout() {
     if (!cart.value.length) throw new Error('Votre panier est vide.')
     const address = addresses.value.find(a => a.id === selectedAddressId.value)
     if (!address) throw new Error('Aucune adresse sélectionnée')
+    // Stocker l'ID de l'adresse sélectionnée pour la page de confirmation
+    if (process.client) {
+      localStorage.setItem('selectedAddressId', String(address.id))
+    }
     const response = await $fetch('/api/stripe', {
       method: 'POST',
       body: {
