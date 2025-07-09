@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { useCart } from '~/composables/useCart'
 import { useStrapi } from '~/composables/useStrapi'
-import { useOrder } from '~/composables/useOrder'
 import { useAuth } from '~/composables/useAuth'
 import Breadcrumb from '~/components/ui/Breadcrumb.vue'
 
 const { cart, updateQuantity, removeFromCart, clearCart, total, addToCart } = useCart()
 const strapi = useStrapi()
-const { createOrder } = useOrder()
 const { currentUser } = useAuth()
 
 interface Product {
-  id: number;
-  productName: string;
-  price: number;
-  slug: string;
-  productImage: { url: string; alternativeText?: string };
+  id: number,
+  productName: string,
+  price: number,
+  slug: string,
+  productImage: { url: string, alternativeText?: string }
+}
+
+interface StripeResponse {
+  url?: string | null;
+  error?: string;
 }
 
 // Fetch un produit cross-sell (différent du panier)
@@ -58,14 +61,25 @@ async function handleOrder() {
   try {
     if (!currentUser.value) throw new Error('Vous devez être connecté pour commander.')
     if (!cart.value.length) throw new Error('Votre panier est vide.')
-    const products = cart.value.map(item => item.id)
-    const price = total.value
-    const orderDate = new Date().toISOString().slice(0, 10)
-    const statut = 'En attente'
-    await createOrder({ products, price, orderDate, statut })
-    clearCart()
-    orderSuccess.value = true
-    setTimeout(() => { orderSuccess.value = false }, 2500)
+    // Appel API Stripe
+    const response = await $fetch<StripeResponse>('/api/stripe', {
+      method: 'POST',
+      body: {
+        products: cart.value.map(item => ({
+          id: item.id,
+          productName: item.productName,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        userId: currentUser.value.id,
+      },
+    })
+    if (response.url) {
+      window.location.href = response.url
+      return
+    } else {
+      throw new Error(response.error || 'Erreur lors de la création de la session de paiement.')
+    }
   } catch (e) {
     orderError.value = (e instanceof Error ? e.message : 'Erreur lors de la commande.')
   } finally {
