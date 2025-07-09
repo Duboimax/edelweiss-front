@@ -40,7 +40,7 @@
       <div class="text-base font-semibold text-[#5a5a52]">{{ props.price.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' }) }}</div>
       
       <button
-        class="mt-4 w-full bg-[#FFB6B0] text-white cursor-pointer font-semibold py-2 rounded-full hover:bg-[#ff8e7a] transition disabled:opacity-60"
+        class="mt-4 w-full bg-[#FFB6B0] text-white font-semibold py-2 rounded-full hover:bg-[#ff8e7a] transition disabled:opacity-60"
         @click.stop="handleAddToCart"
         :disabled="added"
       >

@@ -175,9 +175,9 @@ function handleCommander() {
           </div>
           <h2 class="text-xl font-semibold text-gray-900 mb-2">Votre panier est vide</h2>
           <p class="text-gray-600 mb-8">Découvrez nos produits et ajoutez-les à votre panier</p>
-          <button class="bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+          <NuxtLink to="/shop" class="bg-black text-white cursor-pointer px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
             Continuer mes achats
-          </button>
+          </NuxtLink>
         </div>
       </div>
 
