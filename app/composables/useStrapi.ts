@@ -1,3 +1,4 @@
+// composables/useStrapi.ts
 export const useStrapi = () => {
   const config = useRuntimeConfig()
   
