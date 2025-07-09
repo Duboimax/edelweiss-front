@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useStrapi } from '~/composables/useStrapi'
 import { computed } from 'vue'
-import Breadcrumb from '~/components/ui/Breadcrumb.vue'
+import Breadcrumb from '~/components/ui/Breadcrumb'
+
 const strapi = useStrapi()
 
 interface Blog {
