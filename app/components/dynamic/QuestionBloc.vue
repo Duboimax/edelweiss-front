@@ -12,11 +12,10 @@
         </div>
         <div class="space-y-4">
           <Question
-            v-for="faq in faqs"
-            :key="faq.id"
-            :title="faq.title"
+            v-for="(faq, i) in questions"
+            :key="i"
+            :title="faq.question"
             :answer="faq.answer"
-            :default-open="faq.defaultOpen"
           />
         </div>
       </div>
@@ -28,16 +27,14 @@
 import Question from '~/components/dynamic/Question.vue'
 
 interface FaqData {
-  id: number
-  title: string
+  question: string
   answer: string
-  defaultOpen?: boolean
 }
 
 interface Props {
   title?: string
   subtitle?: string
-  Question: FaqData[]
+  questions: FaqData[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   subtitle: '',
 })
 
-const faqs = props.Question
+const questions = props.questions
 </script>
 
 <style scoped>

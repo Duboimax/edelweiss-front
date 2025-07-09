@@ -58,7 +58,12 @@ watchEffect(() => {
 </script>
 
 <template>
-  <header class="w-full bg-[#f5f2e9] py-4">
+  <header class="w-full bg-[#f5f2e9] pt-0">
+    <!-- Bannière promo -->
+    <div class="w-full bg-[#FFB6B0] text-white text-center py-2 px-4 font-semibold text-sm tracking-wide shadow-sm fixed top-0 left-0 right-0 z-50" style="margin-top:0;">
+      🎁 Livraison offerte dès 60€ d’achat ! Profitez-en aujourd’hui 💝
+    </div>
+    <div style="height:40px;"></div>
     <div class="container mx-auto flex items-center justify-between px-4 md:px-6">
       <div class="flex items-center gap-2">
         <NuxtLink to="/" class="flex items-center">
