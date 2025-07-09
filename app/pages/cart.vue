@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import { useCart } from '~/composables/useCart'
 import { useStrapi } from '~/composables/useStrapi'
+import { useOrder } from '~/composables/useOrder'
+import { useAuth } from '~/composables/useAuth'
+
 const { cart, updateQuantity, removeFromCart, clearCart, total, addToCart } = useCart()
 const strapi = useStrapi()
+const { createOrder } = useOrder()
+const { currentUser } = useAuth()
+
+interface Product {
+  id: number;
+  productName: string;
+  price: number;
+  slug: string;
+  productImage: { url: string; alternativeText?: string };
+}
 
 // Fetch un produit cross-sell (différent du panier)
 const { data: allProducts } = await useAsyncData('all-products', () =>
-  strapi.get<{ data: any[] }>('products', { pLevel: 5 }).then(res => res.data || [])
+  strapi.get<{ data: Product[] }>('products', { pLevel: 5 }).then(res => res.data || []),
 )
-const crossSellProduct = computed(() => {
+const crossSellProduct = computed<Product | null>(() => {
   if (!allProducts.value) return null
   // Prend le premier produit qui n'est pas dans le panier
   return allProducts.value.find(p => !cart.value.some(c => c.id === p.id)) || null
@@ -16,21 +29,46 @@ const crossSellProduct = computed(() => {
 
 const showFeedback = ref(false)
 function showAddFeedback() {
-  showFeedback.value = true
-  setTimeout(() => { showFeedback.value = false }, 1500)
+  showFeedback.value = true;
+  setTimeout(() => { showFeedback.value = false; }, 1500);
 }
 function handleAddToCartCrossSell() {
-  const p = crossSellProduct.value
-  if (!p) return
+  const p = crossSellProduct.value;
+  if (!p) return;
   if (!cart.value.find(c => c.id === p.id)) {
     addToCart({
       id: p.id,
       productName: p.productName,
       price: p.price,
       slug: p.slug,
-      productImage: p.productImage
-    })
-    showAddFeedback()
+      productImage: p.productImage,
+    });
+    showAddFeedback();
+  }
+}
+
+const orderLoading = ref(false)
+const orderSuccess = ref(false)
+const orderError = ref('')
+
+async function handleOrder() {
+  orderLoading.value = true
+  orderError.value = ''
+  try {
+    if (!currentUser.value) throw new Error('Vous devez être connecté pour commander.')
+    if (!cart.value.length) throw new Error('Votre panier est vide.')
+    const products = cart.value.map(item => item.id)
+    const price = total.value
+    const orderDate = new Date().toISOString().slice(0, 10)
+    const statut = 'En attente'
+    await createOrder({ products, price, orderDate, statut })
+    clearCart()
+    orderSuccess.value = true
+    setTimeout(() => { orderSuccess.value = false }, 2500)
+  } catch (e) {
+    orderError.value = (e instanceof Error ? e.message : 'Erreur lors de la commande.')
+  } finally {
+    orderLoading.value = false
   }
 }
 </script>
@@ -269,7 +307,15 @@ function handleAddToCartCrossSell() {
 
               <!-- Boutons d'action -->
               <div class="space-y-3">
-                <button class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2">Commander</button>
+                <button 
+                  class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2"
+                  @click="handleOrder"
+                  :disabled="orderLoading"
+                >
+                  {{ orderLoading ? 'Commande en cours...' : 'Commander' }}
+                </button>
+                <div v-if="orderSuccess" class="text-green-600 text-center font-semibold mt-2">Commande passée avec succès !</div>
+                <div v-if="orderError" class="text-red-600 text-center font-semibold mt-2">{{ orderError }}</div>
                 <div class="text-xs text-gray-500 text-center mt-2">Paiement sécurisé • Retours sous 30 jours • Livraison offerte dès 60€</div>
               </div>
 
