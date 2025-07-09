@@ -50,7 +50,7 @@
           </div>
         </form>
         <button 
-          class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2 mt-4"
+          class="w-full bg-black text-white py-3 cursor-pointer rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2 mt-4"
           :disabled="!selectedAddressId || orderLoading"
           @click="handleCheckout"
         >
@@ -66,7 +66,6 @@
 import { useCart } from '~/composables/useCart'
 import { useAuth } from '~/composables/useAuth'
 import { useStrapi } from '~/composables/useStrapi'
-import { ref, reactive, onMounted } from 'vue'
 
 const { cart } = useCart()
 const { currentUser } = useAuth()

@@ -1,12 +1,5 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <div class="container mx-auto px-4 max-w-5xl mt-8">
-      <Breadcrumb :items="[
-        { label: 'Accueil', to: '/' },
-        { label: 'Inscription', to: null }
-      ]" />
-    </div>
-
     <section class="py-12 md:py-16 bg-gradient-to-br from-[#f9f7f2] via-[#faf8f5] to-[#f5f2e9] flex-1 flex items-center justify-center relative overflow-hidden">
       <!-- Décoration d'arrière-plan -->
       <div class="absolute inset-0 overflow-hidden">
