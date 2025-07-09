@@ -26,7 +26,7 @@ const props = defineProps<{
       <p class="text-[#5a5a52]">{{ props.description }}</p>
       
       <div class="pt-4">
-        <CTA button-name="Explore Collection" :link="props.link" />
+        <CTA button-name="Explore Collection" :link="`/shop?collection=${encodeURIComponent(props.title)}`" />
       </div>
     </div>
   </div>

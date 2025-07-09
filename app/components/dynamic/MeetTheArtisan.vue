@@ -16,7 +16,7 @@ const { data } = props
 
 <template>
   <section class="bg-[#f5f2e9] rounded-xl p-8 w-full mx-auto my-12 flex flex-col items-center">
-    <h2 class="font-serif text-2xl font-medium tracking-tight text-[#2a2a22] sm:text-3xl mb-8">Meet Our Artisans</h2>
+    <h2 class="font-serif text-2xl font-medium tracking-tight text-[#2a2a22] sm:text-3xl mb-8">Rencontrer Nos Artisans</h2>
     <div class="flex flex-col items-center gap-4">
       <div class="w-44 h-44 rounded-full overflow-hidden bg-[#e0ddd2] flex items-center justify-center">
         <img
