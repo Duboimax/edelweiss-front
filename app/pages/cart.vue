@@ -328,13 +328,12 @@ async function handleOrder() {
 
               <!-- Boutons d'action -->
               <div class="space-y-3">
-                <button 
-                  class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2"
-                  @click="handleOrder"
-                  :disabled="orderLoading"
+                <NuxtLink
+                  to="/checkout"
+                  class="w-full bg-black text-white py-3 rounded-lg font-semibold text-lg hover:bg-neutral-800 transition mb-2 flex items-center justify-center text-center"
                 >
-                  {{ orderLoading ? 'Commande en cours...' : 'Commander' }}
-                </button>
+                  Commander
+                </NuxtLink>
                 <div v-if="orderSuccess" class="text-green-600 text-center font-semibold mt-2">Commande passée avec succès !</div>
                 <div v-if="orderError" class="text-red-600 text-center font-semibold mt-2">{{ orderError }}</div>
                 <div class="text-xs text-gray-500 text-center mt-2">Paiement sécurisé • Retours sous 30 jours • Livraison offerte dès 60€</div>
