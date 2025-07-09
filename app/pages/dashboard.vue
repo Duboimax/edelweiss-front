@@ -57,7 +57,8 @@
           <AccountSettings v-if="activeComponent === 'AccountSettings'" :key="'account'" />
           <MyOrders v-else-if="activeComponent === 'MyOrders'" :key="'orders'" />
           <Wishlist v-else-if="activeComponent === 'Wishlist'" :key="'wishlist'" />
-          <AddressBook v-else-if="activeComponent === 'AddressBook'" :key="'addresses'" />
+          <LoyaltyProgram v-else-if="activeComponent === 'LoyaltyProgram'" :key="'loyalty'" />
+
         </Transition>
       </main>
     </div>
@@ -91,6 +92,8 @@ useHead({
 import AccountSettings from '~/components/dashboard/AccountSettings.vue'
 import MyOrders from '~/components/dashboard/MyOrders.vue'
 import Wishlist from '~/components/dashboard/Wishlist.vue'
+import LoyaltyProgram from '~/components/dashboard/LoyaltyProgram.vue'
+
 
 // État actif avec string
 const activeComponent = ref('AccountSettings')
@@ -114,6 +117,12 @@ const menuItems = [
     name: 'Ma Wishlist',
     icon: 'lucide:heart',
     component: 'Wishlist'
+  },
+  {
+    id: 'loyalty',
+    name: 'Fidélité',
+    icon: 'lucide:star',
+    component: 'LoyaltyProgram'
   },
 ]
 

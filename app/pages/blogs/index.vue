@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStrapi } from '~/composables/useStrapi'
 import { computed } from 'vue'
-import { marked } from 'marked'
+
 const strapi = useStrapi()
 
 interface Blog {
