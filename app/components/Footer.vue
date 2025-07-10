@@ -186,32 +186,6 @@ const currentYear = computed(() => new Date().getFullYear())
             </ul>
           </div>
         </div>
-
-        <!-- Newsletter -->
-        <div class="bg-white/60 backdrop-blur-sm border border-[#e6e2d7] rounded-2xl p-8 mb-12">
-          <div class="max-w-2xl mx-auto text-center">
-            <div class="flex items-center justify-center mb-4">
-              <Icon name="lucide:mail" class="h-6 w-6 text-[#FFB6B0] mr-2" />
-              <h3 class="text-xl font-serif font-semibold text-[#2a2a22]">
-                Restez informé de nos créations
-              </h3>
-            </div>
-            <p class="text-[#5a5a52] mb-6 leading-relaxed">
-              Inscrivez-vous à notre newsletter pour découvrir en avant-première nos nouvelles créations et bénéficier d'offres exclusives.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input 
-                type="email" 
-                placeholder="Votre adresse email"
-                class="flex-1 px-4 py-3 border border-[#e6e2d7] rounded-full focus:outline-none focus:ring-2 focus:ring-[#FFB6B0]/50 focus:border-[#FFB6B0] transition-all"
-              />
-              <button class="bg-gradient-to-r from-[#FFB6B0] to-[#ff8e7a] hover:from-[#ff8e7a] hover:to-[#FFB6B0] text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                S'inscrire
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- Séparateur -->
         <div class="border-t border-[#e6e2d7] mb-8"></div>
 
