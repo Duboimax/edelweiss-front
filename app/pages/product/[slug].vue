@@ -96,7 +96,7 @@
                       :aria-label="color.name"
                       @click="selectedColor = color.name"
                       :class="[
-                        'w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-200',
+                        'w-8 h-8 rounded-full border flex cursor-pointer items-center justify-center transition-all duration-200',
                         selectedColor === color.name
                           ? 'border-2 border-[#FFB6B0] ring-2 ring-[#FFB6B0]/20 scale-110 shadow-[0_2px_8px_0_rgba(255,182,176,0.10)]'
                           : 'border border-[#e6e2d7] hover:border-[#FFB6B0] hover:ring-2 hover:ring-[#FFB6B0]/10 hover:scale-105 shadow-[0_2px_8px_0_rgba(230,226,215,0.10)]',
