@@ -81,6 +81,39 @@
               <h1 class="font-serif text-4xl md:text-5xl font-bold text-[#2a2a22] leading-tight">
                 {{ product?.productName }}
               </h1>
+              <!-- Choix couleur : ronds cliquables sur 2 lignes -->
+              <div v-if="!isAccessoire" class="my-4">
+                <div class="mb-2 text-sm font-medium text-[#2a2a22]">Choix de la couleur :</div>
+                <div class="flex flex-wrap gap-2 max-w-xl">
+                  <div
+                    v-for="(color, idx) in colorOptions"
+                    :key="color.name"
+                    class="relative group"
+                    style="width:32px;height:32px;"
+                  >
+                    <button
+                      type="button"
+                      :aria-label="color.name"
+                      @click="selectedColor = color.name"
+                      :class="[
+                        'w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-200',
+                        selectedColor === color.name
+                          ? 'border-2 border-[#FFB6B0] ring-2 ring-[#FFB6B0]/20 scale-110 shadow-[0_2px_8px_0_rgba(255,182,176,0.10)]'
+                          : 'border border-[#e6e2d7] hover:border-[#FFB6B0] hover:ring-2 hover:ring-[#FFB6B0]/10 hover:scale-105 shadow-[0_2px_8px_0_rgba(230,226,215,0.10)]',
+                      ]"
+                      :style="color.img ? `background: url('${color.img}') center/cover no-repeat, ${color.bg}` : `background:${color.bg}`"
+                    ></button>
+                    <!-- Tooltip nom couleur -->
+                    <span
+                      class="absolute left-1/2 -translate-x-1/2 top-10 z-10 px-2 py-0.5 rounded bg-[#2a2a22] text-white text-[10px] font-sans font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg color-tooltip-font"
+                      style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 0.01em;"
+                    >
+                      {{ color.name }}
+                    </span>
+                  </div>
+                </div>
+                <div v-if="selectedColor" class="mt-2 text-xs text-[#5a5a52]">Couleur sélectionnée : <span class="font-semibold">{{ selectedColor }}</span></div>
+              </div>
               
               <!-- Prix et étoiles -->
               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -379,6 +412,31 @@ const truncatedDescription = computed(() =>
   product.value?.productDescription.slice(0, 400)
 )
 
+// Liste des couleurs avec image ou couleur de fond
+const colorOptions = [
+  { name: 'Bleu clair', bg: '#b3d8f7', img: '/colors/bleu-clair.png' },
+  { name: 'Bleu électrique', bg: '#0074e8', img: '/colors/bleu-electrique.png' },
+  { name: 'Bleu foncé', bg: '#1a237e', img: '/colors/bleu-fonce.png' },
+  { name: 'Bleu pétrole', bg: '#19647e', img: '/colors/bleu-petrole.png' },
+  { name: 'Rose poudré', bg: '#f7d6e0', img: '/colors/rose-poudre.png' },
+  { name: 'Mauve', bg: '#b39ddb', img: '/colors/mauve.png' },
+  { name: 'Fuchsia', bg: '#e040fb', img: '/colors/fuchsia.png' },
+  { name: 'Jaune', bg: '#ffe066', img: '/colors/jaune.png' },
+  { name: 'Vert kaki', bg: '#b2b266', img: '/colors/vert-kaki.png' },
+  { name: 'Vert clair', bg: '#b7e4c7', img: '/colors/vert-clair.png' },
+  { name: 'Blanc', bg: '#fff', img: '/colors/blanc.png' },
+  { name: 'Beige', bg: '#f5e9da', img: '/colors/beige.png' },
+  { name: 'Noir', bg: '#222', img: '/colors/noir.png' },
+]
+const selectedColor = ref('')
+
+// Détecter si le produit est un accessoire (collection ou nom)
+const isAccessoire = computed(() => {
+  const name = product.value?.productName?.toLowerCase() || ''
+  const collection = product.value?.collection?.collectionName?.toLowerCase() || ''
+  return name.includes('accessoire') || collection.includes('accessoire')
+})
+
 // Panier
 const { addToCart } = useCart()
 const added = ref(false)
@@ -574,5 +632,13 @@ async function handleShare() {
     font-size: 2rem;
     line-height: 1.2;
   }
+}
+
+/* Police pour le tooltip couleur */
+.color-tooltip-font {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 </style>
