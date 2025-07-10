@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div class="container mx-auto px-4 max-w-5xl mt-8">
-      <Breadcrumb :items="[
-        { label: 'Accueil', to: '/' },
-        { label: 'Contact', to: null }
-      ]" />
-    </div>
     <Head>
       <title>{{ pageData?.title || 'À propos' }}</title>
       <meta 
