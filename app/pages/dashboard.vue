@@ -51,28 +51,6 @@
       <!-- Sidebar moderne -->
       <aside class="w-80 bg-white/80 backdrop-blur-sm border-r border-[#e6e2d7] min-h-[calc(100vh-89px)] shadow-xl">
         <div class="p-8">
-          <!-- Stats rapides -->
-          <div class="mb-8 grid grid-cols-2 gap-4">
-            <div class="bg-gradient-to-br from-[#FFB6B0]/10 to-[#ff8e7a]/5 rounded-2xl p-4 border border-[#FFB6B0]/20">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-xs font-medium text-[#5a5a52] mb-1">Commandes</p>
-                  <p class="text-xl font-bold text-[#2a2a22]">12</p>
-                </div>
-                <Icon name="lucide:shopping-bag" class="h-6 w-6 text-[#FFB6B0]" />
-              </div>
-            </div>
-            <div class="bg-gradient-to-br from-[#2a2a22]/10 to-[#2a2a22]/5 rounded-2xl p-4 border border-[#2a2a22]/20">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-xs font-medium text-[#5a5a52] mb-1">Points</p>
-                  <p class="text-xl font-bold text-[#2a2a22]">1,250</p>
-                </div>
-                <Icon name="lucide:star" class="h-6 w-6 text-[#2a2a22]" />
-              </div>
-            </div>
-          </div>
-
           <!-- Navigation Menu -->
           <nav class="space-y-3">
             <p class="text-xs font-semibold text-[#5a5a52] uppercase tracking-wider mb-4">Navigation</p>
