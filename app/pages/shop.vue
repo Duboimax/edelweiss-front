@@ -212,6 +212,7 @@
                   :key="product.id"
                   :product="product"
                   :index="index"
+                  :rating="productRatings[product.id] ?? 0"
                   @product-click="goToProduct"
                   @add-to-cart="handleAddToCart"
                   @wishlist-toggle="handleWishlistToggle"
@@ -349,9 +350,29 @@ const router = useRouter()
 const pending = ref(true)
 const error = ref(false)
 
+// Gestion des notes moyennes par produit
+const { getProductFeedbacks } = useProduct()
+const productRatings = ref<Record<number, number>>({})
+
+async function fetchAllRatings() {
+  if (!products.value) return
+  const ratings: Record<number, number> = {}
+  await Promise.all(products.value.map(async (p) => {
+    const feedbacks = await getProductFeedbacks(p.id)
+    if (feedbacks.length) {
+      const avg = Math.round(feedbacks.reduce((sum, fb) => sum + (fb.stars || 0), 0) / feedbacks.length)
+      ratings[p.id] = avg
+    } else {
+      ratings[p.id] = 0
+    }
+  }))
+  productRatings.value = ratings
+}
+
 onMounted(async () => {
   try {
     await fetchAllProducts()
+    await fetchAllRatings()
     console.log('✅ Shop: Products loaded from cache')
   } catch (err) {
     console.error('❌ Shop: Error loading products:', err)

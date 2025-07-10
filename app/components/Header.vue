@@ -16,11 +16,11 @@ const { count } = useCart()
 
 const navigationItems: NavigationItem[] = [
   { name: 'Accueil', path: '/' },
-  { name: 'À propos', path: '/about' },
   { name: 'Boutique', path: '/shop' },
   { name: 'Collections', path: '/collections' },
   { name: 'Blogs', path: '/blogs' },
   { name: 'Contact', path: '/contact' },
+  { name: 'À propos', path: '/about' },
 ]
 
 // Auth items conditionnels
